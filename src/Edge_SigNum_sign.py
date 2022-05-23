@@ -131,7 +131,10 @@ def main(args):
     
     
     dataset_name = args.dataset.split('/')
-    data = load_signed_real_data(dataset=args.dataset).to(device)
+    try:
+        data = load_signed_real_data(dataset=args.dataset).to(device)
+    except:
+        data = read_edge_list_2(path = f"./data/wikirfa/{args.dataset}.csv")
     subset = args.dataset
     edge_index = data.edge_index
         
