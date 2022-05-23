@@ -1,9 +1,7 @@
 import os, sys
 
 epochs = '3000'
-for data in [
-            'dataset_nodes500_alpha0.1_beta0.2'
-            ]:
+for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
     for task in ['direction', 'existence','all'
                 ]:
         num_class_link = 2

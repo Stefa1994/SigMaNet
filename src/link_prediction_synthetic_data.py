@@ -1,17 +1,11 @@
 import os, sys
 
 epochs = '3000'
-for data in [
-            'dataset_nodes500_alpha0.08_beta0.2'
-            ]:
-    for task in ['direction', 'existence'#,
-    #'all'
-                ]:
+for data in ['dataset_nodes500_alpha0.05_beta0.2', 'dataset_nodes500_alpha0.08_beta0.2', 'dataset_nodes500_alpha0.1_beta0.2']:
+    for task in ['direction', 'existence']:
         num_class_link = 2
-        if task == 'all':
-                num_class_link = 3
         for lr in [1e-3]:
-            log_path = 'Edge_'+data#[:-1]
+            log_path = 'Edge_'+data
             for num_filter in [16 , 32, 64]:
                 for q in [0.01, 0.05, 0.1, 0.15, 0.2, 0.25
                                 ]:
@@ -82,18 +76,6 @@ for data in [
                                 +' --noisy')
                     print(command)
                     os.system(command)
-            #        # Per forza undirected
-            #        #command = ('python3 Edge_GCN.py ' 
-            #        #            +' --dataset='+data
-            #        #            +' -D'
-            #        #            +' --task='+ task
-            #        #            +' --num_filter='+str(num_filter)
-            #        #            +' --log_path='+str(log_path)
-            #        #            +' --num_class_link='+str(num_class_link)
-            #        #            +' --epochs='+epochs
-            #        #            +' --lr='+str(lr))
-            #        #print(command)
-            #        #os.system(command)
 #
             log_path = 'Edge_'+data+'_SAGE'
             for num_filter in [16, 32, 64
@@ -191,20 +173,6 @@ for data in [
                                     +' --noisy')
                         print(command)
                         os.system(command)
-            #            command = ('python3 Edge_APPNP.py ' 
-            ##                        +' --dataset='+data
-            ##                        +' -D'
-            ##                        +' --task='+ task
-            ##                        +' --num_filter='+str(num_filter)
-            ##                        +' --num_class_link='+str(num_class_link)
-            ##                        +' --log_path='+str(log_path)
-            ##                        +' --epochs='+epochs
-            ##                        +' --lr='+str(lr)
-            ##                        +' --K='+str(K)
-            ##                        +' --alpha='+str(alpha)
-            ##                        +' -tud')
-            ##            print(command)
-            ##            os.system(command)
         ##
             log_path = 'Edge_'+data+'_Digraph'
             for num_filter in [16, 32, 64

@@ -1,4 +1,4 @@
-import os, sys
+import os
 
 epochs = '3000'
 for data in ['dataset_nodes500_alpha0.08_beta0.2', 'dataset_nodes500_alpha0.1_beta0.2', 'dataset_nodes500_alpha0.05_beta0.2'
