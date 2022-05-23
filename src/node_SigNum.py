@@ -78,8 +78,6 @@ def sparse_mx_to_torch_sparse_tensor(sparse_mx):
     return torch.sparse.FloatTensor(indices, values, shape)
 
 def main(args):
-    #if args.randomseed > 0:
-    #    torch.manual_seed(args.randomseed)
 
     random.seed(args.randomseed)
     torch.manual_seed(args.randomseed)
@@ -93,18 +91,11 @@ def main(args):
 
     dataset_name = args.dataset.split('/')
     if len(dataset_name) == 1:
-        #data = load_signed_real_data_no_negative_classification(dataset=args.dataset)#.to(device)
-        #G = nx.from_scipy_sparse_matrix(data.A, create_using=nx.DiGraph)
-        #G.remove_nodes_from(list(nx.isolates(G)))
-        #data.A = nx.to_scipy_sparse_matrix(G)
-        #data.edge_index, data.edge_weight = from_scipy_sparse_matrix(sp.coo_matrix(data.A))
-        #data.y = torch.from_numpy(np.load(os.path.join('../data/label', args.dataset.lower() +'_labels.npy' ))).long()
         data = pk.load(open(f'../data/fake/{args.dataset}.pk','rb'))
         data = node_class_split(data, train_size_per_class=0.6, val_size_per_class=0.2)
         subset = args.dataset
     else:
         load_func, subset = args.dataset.split('/')[0], args.dataset.split('/')[1]
-     #save_name = args.method_name + '_' + 'Layer' + str(args.layer) + '_' + 'lr' + str(args.lr) + 'num_filters' + str(int(args.num_filter))+ '_' + 'task' + str((args.task))
         data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[1])#.to(device)
     dataset = data
 
@@ -143,7 +134,6 @@ def main(args):
 
     splits = train_mask.shape[1]
     if len(test_mask.shape) == 1:
-        #data.test_mask = test_mask.unsqueeze(1).repeat(1, splits)
         test_mask = np.repeat(test_mask[:,np.newaxis], splits, 1)
 
     results = np.zeros((splits, 4))
@@ -156,7 +146,6 @@ def main(args):
 
         opt = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.l2)
 
-        best_test_acc = 0.0
         train_index = train_mask[:,split]
         val_index = val_mask[:,split]
         test_index = test_mask[:,split]
@@ -165,7 +154,6 @@ def main(args):
         # Train/Validation/Test
         #################################
         best_test_err = 1000.0
-        best_test_acc = 0.0
         early_stopping = 0
         for epoch in range(args.epochs):
             start_time = time.time()
@@ -268,7 +256,6 @@ if __name__ == "__main__":
             __file__)), '../result_arrays',args.log_path,args.dataset+'/')
     if os.path.isdir(dir_name) == False:
         os.makedirs(dir_name)
-    save_name = args.method_name + 'lr' + str(int(args.lr*1000)) + 'num_filters' + str(int(args.num_filter)) + 'layer' + str(int(args.layer))
     save_name = args.method_name + 'lr' + str(int(args.lr*1000)) + 'num_filters' + str(int(args.num_filter)) + 'layer' + str(args.layer) + 'net_flow' + str(args.netflow)  + '_math' + str(args.follow_math)
 
     args.save_name = save_name
