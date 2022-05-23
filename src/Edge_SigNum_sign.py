@@ -8,12 +8,7 @@ import os, time, argparse, csv
 from collections import Counter
 import random
 import torch.nn.functional as F
-from sklearn.model_selection import train_test_split
-from torch.optim.lr_scheduler import CosineAnnealingLR
-from torch_geometric.datasets import WebKB, WikipediaNetwork, WikiCS
-from torch_geometric.utils import to_undirected
-from torch_geometric_signed_directed.data import load_directed_real_data
-from torch_geometric_signed_directed.data.signed import load_signed_real_data, SignedDirectedGraphDataset
+from torch_geometric_signed_directed.data.signed import load_signed_real_data
 from scipy.sparse import coo_matrix
 from torch_geometric.data import Data
 import networkx as nx
@@ -24,8 +19,7 @@ import scipy.sparse as sparse
 # internal files
 from layer.Signum import Signum_link_prediction_one_laplacian
 from layer.src2 import laplacian
-from torch_geometric_signed_directed.data import load_directed_real_data
-from utils.edge_data import link_class_split, in_out_degree, link_prediction_evaluation
+from utils.edge_data import link_class_split, link_prediction_evaluation
 from utils.save_settings import write_log
 
 # select cuda device if available
@@ -205,8 +199,6 @@ def main(args):
             out_1 = model(X_real, X_img, train_index)
 
             train_loss = F.nll_loss(out_1, y_train)
-            #pred_label = out_1.max(dim = 1)[1]            
-            #train_acc  = acc(pred_label, y_train)
             
             train_acc_full, train_acc, train_auc, train_f1_micro, train_f1_macro = link_prediction_evaluation(out_1, y_train)
 
@@ -220,9 +212,6 @@ def main(args):
             model.eval()
             out_2 = model(X_real, X_img, test_index)
 
-            #test_loss  = F.nll_loss(out_2, y_test)
-            #pred_label = out_2.max(dim = 1)[1]            
-            #test_acc   = acc(pred_label, y_test)
             test_acc_full, test_acc, test_auc, test_f1_micro, test_f1_macro =  link_prediction_evaluation(out_2, y_test)
             outstrtrain = 'Test f1: %.6f, test_f1_macro: %.3f' % (test_acc, test_f1_macro)
             outstrval = ' Test_f1_micro: %.6f, test_auc: %.3f' % (test_f1_micro, test_auc)            
@@ -251,19 +240,16 @@ def main(args):
 
         model.load_state_dict(torch.load(log_path + '/model_macro'+str(i)+'.t7'))
         model.eval()
-        #out_train = model(X_real, X_img, train_index)
         out_test = model(X_real, X_img, test_index)
         test_acc_full_1, test_acc_1, test_auc_1, test_f1_micro_1, test_f1_macro_1 = link_prediction_evaluation(out_test, y_test)
 
         model.load_state_dict(torch.load(log_path + '/model_auc'+str(i)+'.t7'))
         model.eval()
-        #out_train = model(X_real, X_img, train_index)
         out_test = model(X_real, X_img, test_index)
         test_acc_full_2, test_acc_2, test_auc_2, test_f1_micro_2, test_f1_macro_2 = link_prediction_evaluation(out_test, y_test)
 
         model.load_state_dict(torch.load(log_path + '/model_latest'+str(i)+'.t7'))
         model.eval()
-        #out_train = model(X_real, X_img, train_index)
         out_test = model(X_real, X_img, test_index)
         test_acc_full_latest, test_acc_latest, test_auc_latest,  test_f1_micro_latest, test_f1_macro_latest = link_prediction_evaluation(out_test, y_test)
             ####################
