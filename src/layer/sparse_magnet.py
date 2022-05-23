@@ -1,3 +1,9 @@
+#############################################
+# Copy and modified from Magnet 
+# https://github.com/matthew-hirn/magnet/tree/f88f73b8468053dca0967621838ecb9255734797
+#############################################
+
+
 import torch, math
 import torch.nn as nn
 import torch.nn.functional as F

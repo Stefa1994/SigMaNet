@@ -1,18 +1,15 @@
 import os, sys
 
 epochs = '3000'
-for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
-    for task in ['direction', 'existence','all'
-                ]:
+for data in ['dataset_nodes500_alpha0.05_beta0.2', 'dataset_nodes500_alpha0.08_beta0.2', 'dataset_nodes500_alpha0.1_beta0.2']:
+    for task in ['direction', 'existence']:
         num_class_link = 2
-        if task == 'all':
-                num_class_link = 3
         for lr in [1e-3]:
-            log_path = 'Edge_'+data[:-1]
+            log_path = 'Edge_'+data
             for num_filter in [16 , 32, 64]:
                 for q in [0.01, 0.05, 0.1, 0.15, 0.2, 0.25
                                 ]:
-                    command = ('python3 Edge_sparseMagnet.py ' 
+                    command = ('python3 src/Edge_sparseMagnet.py ' 
                                 +' --dataset='+data
                                 +' --q='+str(q)
                                 +' --num_filter='+str(num_filter)
@@ -30,10 +27,10 @@ for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
                     print(command)
                     os.system(command)
 #
-            log_path = 'Edge_'+data[:-1]+'_SymDiGCN'
+            log_path = 'Edge_'+data+'_SymDiGCN'
             for num_filter in [5, 15, 30
             ]:
-                command = ('python3 Edge_SymDiGCN.py ' 
+                command = ('python3 src/Edge_SymDiGCN.py ' 
                             +' --dataset='+data
                             +' --num_filter='+str(num_filter)
                             +' --log_path='+str(log_path)
@@ -46,10 +43,10 @@ for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
                 print(command)
                 os.system(command)
 ##
-            log_path = 'Edge_'+data[:-1]+'_Cheb'
+            log_path = 'Edge_'+data+'_Cheb'
             for num_filter in [16, 32, 64
             ]:
-                    command = ('python3 Edge_Cheb.py ' 
+                    command = ('python3 src/Edge_Cheb.py ' 
                                 +' --dataset='+data
                                 +' --K=2'
                                 #+' -D'
@@ -63,10 +60,10 @@ for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
                     print(command)
                     os.system(command)
 ##
-            log_path = 'Edge_'+data[:-1]+'_GCN'
+            log_path = 'Edge_'+data+'_GCN'
             for num_filter in [16, 32, 64
             ]:
-                    command = ('python3 Edge_GCN.py ' 
+                    command = ('python3 src/Edge_GCN.py ' 
                                 +' --dataset='+data
                                 #+' -D'
                                 +' --task='+ task
@@ -79,23 +76,11 @@ for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
                                 +' --noisy')
                     print(command)
                     os.system(command)
-            #        # Per forza undirected
-            #        #command = ('python3 Edge_GCN.py ' 
-            #        #            +' --dataset='+data
-            #        #            +' -D'
-            #        #            +' --task='+ task
-            #        #            +' --num_filter='+str(num_filter)
-            #        #            +' --log_path='+str(log_path)
-            #        #            +' --num_class_link='+str(num_class_link)
-            #        #            +' --epochs='+epochs
-            #        #            +' --lr='+str(lr))
-            #        #print(command)
-            #        #os.system(command)
 #
-            log_path = 'Edge_'+data[:-1]+'_SAGE'
+            log_path = 'Edge_'+data+'_SAGE'
             for num_filter in [16, 32, 64
             ]:
-                    command = ('python3 Edge_SAGE.py ' 
+                    command = ('python3 src/Edge_SAGE.py ' 
                                 +' --dataset='+data
                                 +' --task='+ task
                                 +' --num_filter='+str(num_filter)
@@ -106,25 +91,25 @@ for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
                                 +' --noisy')
                     print(command)
                     os.system(command)
-                    command = ('python3 Edge_SAGE.py ' 
-                            +' --dataset='+data
-                            +' --task='+ task
-                            +' --num_filter='+str(num_filter)
-                            +' --num_class_link='+str(num_class_link)
-                            +' --log_path='+str(log_path)
-                            +' --epochs='+epochs
-                            +' --lr='+str(lr)
-                            +' -tud'
-                            +' --noisy')
-                    print(command)
-                    os.system(command)
+                    #command = ('python3 src/Edge_SAGE.py ' 
+                    #        +' --dataset='+data
+                    #        +' --task='+ task
+                    #        +' --num_filter='+str(num_filter)
+                    #        +' --num_class_link='+str(num_class_link)
+                    #        +' --log_path='+str(log_path)
+                    #        +' --epochs='+epochs
+                    #        +' --lr='+str(lr)
+                    #        +' -tud'
+                    #        +' --noisy')
+                    #print(command)
+                    #os.system(command)
 #
-            log_path = 'Edge_'+data[:-1]+'_GAT'
+            log_path = 'Edge_'+data+'_GAT'
             for heads in [2, 4, 8
             ]:
                 for num_filter in [16, 32, 64
                 ]:
-                    command = ('python3 Edge_GAT.py ' 
+                    command = ('python3 src/Edge_GAT.py ' 
                                 +' --dataset='+data
                                 +' --task='+ task
                                 +' --heads='+str(heads)
@@ -136,25 +121,25 @@ for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
                                 +' --noisy')
                     print(command)
                     os.system(command) 
-                    command = ('python3 Edge_GAT.py ' 
-                                +' --dataset='+data
-                                +' --task='+ task
-                                +' --heads='+str(heads)
-                                +' --num_filter='+str(num_filter)
-                                +' --num_class_link='+str(num_class_link)
-                                +' --log_path='+str(log_path)
-                                +' --lr='+str(lr)
-                                +' --epochs='+epochs
-                                +' -tud'
-                                +' --noisy')
-                    print(command)
-                    os.system(command) 
+                    #command = ('python3 src/Edge_GAT.py ' 
+                    #            +' --dataset='+data
+                    #            +' --task='+ task
+                    #            +' --heads='+str(heads)
+                    #            +' --num_filter='+str(num_filter)
+                    #            +' --num_class_link='+str(num_class_link)
+                    #            +' --log_path='+str(log_path)
+                    #            +' --lr='+str(lr)
+                    #            +' --epochs='+epochs
+                    #            +' -tud'
+                    #            +' --noisy')
+                    #print(command)
+                    #os.system(command) 
 #
 #
-            log_path = 'Edge_'+data[:-1]+'_GIN'
+            log_path = 'Edge_'+data+'_GIN'
             for num_filter in [16, 32, 64
             ]:
-                    command = ('python3 Edge_GIN.py ' 
+                    command = ('python3 src/Edge_GIN.py ' 
                                 +' --dataset='+data
                                 #+' -D'
                                 +' --task='+ task
@@ -167,14 +152,14 @@ for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
                     print(command)
                     os.system(command)
         ##
-            log_path = 'Edge_'+data[:-1]+'_APPNP'
+            log_path = 'Edge_'+data+'_APPNP'
             for num_filter in [16, 32, 48
             ]:
                 for alpha in [0.05, 0.1, 0.15, 0.2
                 ]: 
                     for K in [1, 5, 10
                     ]: 
-                        command = ('python3 Edge_APPNP.py ' 
+                        command = ('python3 src/Edge_APPNP.py ' 
                                     +' --dataset='+data
             #                        +' -D'
                                     +' --task='+ task
@@ -188,27 +173,13 @@ for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
                                     +' --noisy')
                         print(command)
                         os.system(command)
-            #            command = ('python3 Edge_APPNP.py ' 
-            ##                        +' --dataset='+data
-            ##                        +' -D'
-            ##                        +' --task='+ task
-            ##                        +' --num_filter='+str(num_filter)
-            ##                        +' --num_class_link='+str(num_class_link)
-            ##                        +' --log_path='+str(log_path)
-            ##                        +' --epochs='+epochs
-            ##                        +' --lr='+str(lr)
-            ##                        +' --K='+str(K)
-            ##                        +' --alpha='+str(alpha)
-            ##                        +' -tud')
-            ##            print(command)
-            ##            os.system(command)
         ##
-            log_path = 'Edge_'+data[:-1]+'_Digraph'
+            log_path = 'Edge_'+data+'_Digraph'
             for num_filter in [16, 32, 64
             ]:
                 for alpha in [0.1, 0.05, 0.15, 0.2
                 ]: 
-                    command = ('python3 Edge_Digraph.py ' 
+                    command = ('python3 src/Edge_Digraph.py ' 
                                 +' --dataset='+data
             #                    +' -D'
                                 +' --task='+ task

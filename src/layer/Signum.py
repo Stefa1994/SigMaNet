@@ -1,7 +1,5 @@
 '''
-
 SigMaNet architecture
-
 '''
 
 import torch

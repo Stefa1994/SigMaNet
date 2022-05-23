@@ -14,7 +14,7 @@ for data in ['telegram',  'dataset_nodes500_alpha0.05_beta0.2', 'dataset_nodes50
         64]:
             for q in [0.01, 0.05, 0.1, 0.15, 0.2, 
             0.25]:
-                command = ('python3 sparse_Magnet.py ' 
+                command = ('python3 src/sparse_Magnet.py ' 
                             +' --dataset='+data
                             +' --q='+str(q)
                             +' --num_filter='+str(num_filter)
@@ -30,7 +30,7 @@ for data in ['telegram',  'dataset_nodes500_alpha0.05_beta0.2', 'dataset_nodes50
         # DGCN
         log_path = 'Sym_' + data
         for num_filter in [5, 15, 30]:
-            command = ('python3 Sym_DiGCN.py ' 
+            command = ('python3 src/Sym_DiGCN.py ' 
                         +' --dataset='+data
                         +' --num_filter='+str(num_filter)
                         +' --log_path='+str(log_path)
@@ -43,7 +43,7 @@ for data in ['telegram',  'dataset_nodes500_alpha0.05_beta0.2', 'dataset_nodes50
         log_path = 'GCN_' + data
         for num_filter in [16, 32, 
         64]:
-            command = ('python3 GCN.py ' 
+            command = ('python3 src/GCN.py ' 
                         +' --dataset='+data
                         +' --num_filter='+str(num_filter)
                         +' --log_path='+str(log_path)
@@ -57,7 +57,7 @@ for data in ['telegram',  'dataset_nodes500_alpha0.05_beta0.2', 'dataset_nodes50
         log_path = 'Cheb_' + data
         for num_filter in [16, 32, 
         64]:
-            command = ('python3 Cheb.py ' 
+            command = ('python3 src/Cheb.py ' 
                         +' --dataset='+data
                         +' --K=2'
                         +' --num_filter='+str(num_filter)
@@ -72,7 +72,7 @@ for data in ['telegram',  'dataset_nodes500_alpha0.05_beta0.2', 'dataset_nodes50
         log_path = 'SAGE_' + data
         for num_filter in [16, 32, 
         64]:
-            command = ('python3 SAGE.py ' 
+            command = ('python3 src/SAGE.py ' 
                         +' --dataset='+data
                         +' --num_filter='+str(num_filter)
                         +' --log_path='+str(log_path)
@@ -87,7 +87,7 @@ for data in ['telegram',  'dataset_nodes500_alpha0.05_beta0.2', 'dataset_nodes50
         8]:
             for num_filter in [16, 32, 
             64]:
-                command = ('python3 GAT.py ' 
+                command = ('python3 src/GAT.py ' 
                             +' --dataset='+data
                             +' --heads='+str(heads)
                             +' --num_filter='+str(num_filter)
@@ -102,7 +102,7 @@ for data in ['telegram',  'dataset_nodes500_alpha0.05_beta0.2', 'dataset_nodes50
         log_path = 'GIN_' + data
         for num_filter in [16, 32, 
         64]:
-            command = ('python3 GIN.py ' 
+            command = ('python3 src/GIN.py ' 
                         +' --dataset='+data
                         +' --num_filter='+str(num_filter)
                         +' --log_path='+str(log_path)
@@ -119,7 +119,7 @@ for data in ['telegram',  'dataset_nodes500_alpha0.05_beta0.2', 'dataset_nodes50
         64]:
             for alpha in [0.05, 0.1, 0.15, 
             0.2]: 
-                command = ('python3 APPNP.py ' 
+                command = ('python3 src/APPNP.py ' 
                             +' --dataset='+data
                             +' --num_filter='+str(num_filter)
                             +' --log_path='+str(log_path)
@@ -136,7 +136,7 @@ for data in ['telegram',  'dataset_nodes500_alpha0.05_beta0.2', 'dataset_nodes50
         64]:
             for alpha in [0.05, 0.1, 0.15, 
             0.2]: 
-                command = ('python3 Digraph.py ' 
+                command = ('python3 src/Digraph.py ' 
                             +' --dataset='+data
                             +' --num_filter='+str(num_filter)
                             +' --log_path='+str(log_path)
