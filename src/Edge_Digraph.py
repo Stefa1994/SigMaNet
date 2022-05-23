@@ -72,19 +72,23 @@ def main(args):
     #if 'dataset' in locals():
     #    data = dataset[0]
     #    edge_index = data.edge_index
-        #feature = dataset[0].x.data
-        
+        #feature = dataset[0].x.data  
+    
     dataset_name = args.dataset.split('/')
-    if len(dataset_name) == 1:
+    if args.dataset in ['telegram']:
+        data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[0]).to(device)
+        data = data.to(device)
+        subset = args.dataset
+    else:
+        #data = load_signed_real_data_no_negative(dataset=args.dataset).to(device)
+        #data, edge_neg, weight_neg = load_signed_real_data_also_negative(dataset=args.dataset)
         if args.dataset in ['bitcoin_alpha', 'bitcoin_otc']:
             data = load_signed_real_data_no_negative(dataset=args.dataset).to(device)
         else:
-            data = pk.load(open(f'../data/fake/{args.dataset}.pk','rb')).to(device)
+            data = pk.load(open(f'../data/fake/{args.dataset}.pk','rb'))
+        #subset = args.dataset        
+        data = data.to(device)
         subset = args.dataset
-    else:
-        load_func, subset = args.dataset.split('/')[0], args.dataset.split('/')[1]
-     #save_name = args.method_name + '_' + 'Layer' + str(args.layer) + '_' + 'lr' + str(args.lr) + 'num_filters' + str(int(args.num_filter))+ '_' + 'task' + str((args.task))
-        data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[1]).to(device)
 
     edge_index = data.edge_index
 
