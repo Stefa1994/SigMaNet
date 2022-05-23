@@ -1,10 +1,12 @@
 import numpy as np
+import pandas as pd
 import torch
 import pickle as pk
 import torch.optim as optim
 from datetime import datetime
 import os, time, argparse, csv
 from collections import Counter
+import random
 import torch.nn.functional as F
 from sklearn.model_selection import train_test_split
 from torch.optim.lr_scheduler import CosineAnnealingLR
@@ -12,8 +14,11 @@ from torch_geometric.datasets import WebKB, WikipediaNetwork, WikiCS
 from torch_geometric.utils import to_undirected
 from torch_geometric_signed_directed.data import load_directed_real_data
 from torch_geometric_signed_directed.data.signed import load_signed_real_data, SignedDirectedGraphDataset
-import random
 from scipy.sparse import coo_matrix
+from torch_geometric.data import Data
+import networkx as nx
+import scipy.sparse as sparse
+
 
 
 # internal files
@@ -59,6 +64,22 @@ def parse_args():
 
     return parser.parse_args()
 
+def read_edge_list_2(path):
+    """
+    Load edges from a txt file.
+    """
+    G = nx.DiGraph()
+    edges =pd.read_csv(path, usecols = ['source','target', 'vote'])
+    for i in range(edges.shape[0]):
+        G.add_edge(int(edges.iloc[i][0]), int(edges.iloc[i][1]), weight=edges.iloc[i][2])
+    A1 = nx.adjacency_matrix(G)
+    s_A = sparse.csr_matrix(A1)
+    coo = s_A.tocoo()
+    indices = np.vstack((coo.row, coo.col))
+    indices = torch.from_numpy(indices).long()
+    data = Data(edge_index=indices, edge_weight=coo.data, num_nodes =  max(G.nodes) + 1)
+    return data
+
 def in_out_degree_2(edge_index:torch.LongTensor, size:int, weight=None) -> torch.Tensor:
     r"""
     Get the in degrees and out degrees of nodes
@@ -101,10 +122,6 @@ def main(args):
     torch.manual_seed(args.randomseed)
     np.random.seed(args.randomseed)
 
-    #follow_math = False
-    gcn = False
-    #net_flow = True
-
     date_time = datetime.now().strftime('%m-%d-%H:%M:%S')
     log_path = os.path.join(args.log_root, args.log_path, args.save_name, date_time)
 
@@ -118,18 +135,9 @@ def main(args):
     subset = args.dataset
     edge_index = data.edge_index
         
-    # load dataset
-    #if 'dataset' in locals():
-    #    data = dataset[0]
-    #    edge_index = data.edge_index
-        #feature = dataset[0].x.data
 
     size = torch.max(edge_index).item()+1
     data.num_nodes = size
-    # generate edge index dataset
-    #if args.task == 2:
-    #    datasets = generate_dataset_2class(edge_index, splits = 10, test_prob = args.drop_prob)
-    #else:
     save_file = args.data_path + args.dataset + '/' + subset
 
     datasets = link_class_split(data, prob_val=args.split_prob[0], prob_test=args.split_prob[1], splits = 5, task = args.task, noisy = args.noisy)
@@ -157,10 +165,10 @@ def main(args):
         ########################################
         # initialize model and load dataset
         ########################################
-        edge_index, norm_real, norm_imag = laplacian.process_magnetic_laplacian(edge_index=edge_index, gcn=gcn, net_flow=args.netflow, x_real=X_real, edge_weight=edge_weight, \
+        edge_index, norm_real, norm_imag = laplacian.process_magnetic_laplacian(edge_index=edge_index, gcn=False, net_flow=args.netflow, x_real=X_real, edge_weight=edge_weight, \
          normalization = 'sym', return_lambda_max = False)
         model = Signum_link_prediction_one_laplacian(K=args.K, num_features=2, hidden=args.num_filter, label_dim=args.num_class_link,
-                            i_complex = False,  layer=args.layer, follow_math=args.follow_math, gcn =gcn, net_flow=args.netflow, unwind = True, edge_index=edge_index,\
+                            i_complex = False,  layer=args.layer, follow_math=args.follow_math, gcn =False, net_flow=args.netflow, unwind = True, edge_index=edge_index,\
                             norm_real=norm_real, norm_imag=norm_imag).to(device)
 
         #model = nn.DataParallel(model)  
