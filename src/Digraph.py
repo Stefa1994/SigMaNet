@@ -3,12 +3,8 @@ import numpy as np
 import pickle as pk
 import torch.optim as optim
 from datetime import datetime
-import os, time, argparse, csv
-from collections import Counter
+import os, time, argparse
 import torch.nn.functional as F
-from sklearn.model_selection import train_test_split
-from torch.optim.lr_scheduler import CosineAnnealingLR
-from torch_geometric.datasets import WebKB, WikipediaNetwork, WikiCS
 from torch_geometric_signed_directed.data import load_directed_real_data
 import random
 import networkx as nx
@@ -20,9 +16,8 @@ import pickle as pk
 from layer.DiGCN import *
 from utils.Citation import *
 from layer.geometric_baselines import *
-from utils.preprocess import geometric_dataset, load_syn
 from utils.save_settings import write_log
-from utils.edge_data import in_out_degree,  get_appr_directed_adj, get_second_directed_adj, load_signed_real_data_no_negative, from_scipy_sparse_matrix
+from utils.edge_data import in_out_degree,  get_appr_directed_adj, get_second_directed_adj
 
 # select cuda device if available
 cuda_device = 0

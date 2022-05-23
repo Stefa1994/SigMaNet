@@ -4,8 +4,7 @@ import torch
 import pickle as pk
 import torch.optim as optim
 from datetime import datetime
-import os, time, argparse, csv
-from collections import Counter
+import os, time, argparse
 import random
 import torch.nn.functional as F
 from torch_geometric_signed_directed.data.signed import load_signed_real_data

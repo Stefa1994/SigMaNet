@@ -3,13 +3,7 @@ import pickle as pk
 import torch.optim as optim
 from datetime import datetime
 import os, time, argparse, csv
-from collections import Counter
 import torch.nn.functional as F
-from sklearn.metrics import f1_score
-from sklearn.model_selection import train_test_split
-from torch.optim.lr_scheduler import CosineAnnealingLR
-from torch_geometric.datasets import WebKB, WikipediaNetwork, WikiCS
-from torch_geometric.utils import to_undirected
 from torch_geometric_signed_directed.data import load_directed_real_data
 import random
 import pickle as pk
@@ -18,8 +12,8 @@ import pickle as pk
 # internal files
 import torch
 from layer.DGCN import Sym_Link
-from utils.edge_data import link_class_split, in_out_degree, link_prediction_evaluation, load_signed_real_data_no_negative
-from utils.preprocess import geometric_dataset, load_edge_index, load_syn, F_in_out
+from utils.edge_data import link_class_split, in_out_degree, load_signed_real_data_no_negative
+from utils.preprocess import F_in_out
 from utils.save_settings import write_log
 # select cuda device if available
 from utils.Citation import load_citation_link
@@ -215,53 +209,6 @@ def main(args):
         log_str_full += log_str2 + '\n'
         print(log_str1+log_str2)
         results[i] = [val_acc, test_acc, val_acc_latest, test_acc_latest]
-        #else:
-        #    model.load_state_dict(torch.load(log_path + '/model'+str(i)+'.t7'))
-        #    model.eval()
-        #    out_val = model(x, edge_index, edge_in, in_weight, edge_out, out_weight, val_index)
-        #    out_test = model(x, edge_index, edge_in, in_weight, edge_out, out_weight, test_index)
-        #    [[val_acc_full, val_acc, val_auc, val_f1_micro, val_f1_macro],
-        #        [test_acc_full, test_acc, test_auc, 
-        #        test_f1_micro, test_f1_macro]] = link_prediction_evaluation(out_val, out_test, y_val, y_test)
-            
-        #    model.load_state_dict(torch.load(log_path + '/model_latest'+str(i)+'.t7'))
-        #    model.eval()
-        #    out_val = model(x, edge_index, edge_in, in_weight, edge_out, out_weight, val_index)
-        #    out_test = model(x, edge_index, edge_in, in_weight, edge_out, out_weight, test_index)
-        #    [[val_acc_full_latest, val_acc_latest, val_auc_latest, val_f1_micro_latest, val_f1_macro_latest],
-        #                    [test_acc_full_latest, test_acc_latest, test_auc_latest, 
-        #                    test_f1_micro_latest, test_f1_macro_latest]] = link_prediction_evaluation(out_val, out_test, y_val, y_test)
-            ####################
-            # Save testing results
-            ####################
-        #    log_str = ('val_acc_full:{val_acc_full:.4f}, val_acc: {val_acc:.4f}, Val_auc: {val_auc:.4f},'
-        #                + 'val_f1_micro: {val_f1_micro:.4f}, val_f1_macro: {val_f1_macro:.4f}, ' 
-        #                + 'test_acc_full:{test_acc_full:.4f}, test_acc: {test_acc:.4f}, '
-        #                + 'test_f1_micro: {test_f1_micro:.4f}, test_f1_macro: {test_f1_macro:.4f}')
-        #    log_str = log_str.format(val_acc_full = val_acc_full, 
-        #                                val_acc = val_acc, val_auc = val_auc, val_f1_micro = val_f1_micro, 
-        #                                val_f1_macro = val_f1_macro, test_acc_full = test_acc_full, 
-        #                                test_acc = val_acc, 
-        #                                test_f1_micro = val_f1_micro, test_f1_macro = val_f1_macro)
-        #    log_str_full += log_str + '\n'
-        #    print(log_str)
-
-        #    log_str = ('val_acc_full_latest:{val_acc_full_latest:.4f}, val_acc_latest: {val_acc_latest:.4f}, Val_auc_latest: {val_auc_latest:.4f},' 
-        #                + 'val_f1_micro_latest: {val_f1_micro_latest:.4f}, val_f1_macro_latest: {val_f1_macro_latest:.4f},' 
-        #                + 'test_acc_full_latest:{test_acc_full_latest:.4f}, test_acc_latest: {test_acc_latest:.4f}, ' 
-        #                + 'test_f1_micro_latest: {test_f1_micro_latest:.4f}, test_f1_macro_latest: {test_f1_macro_latest:.4f}')
-        #    log_str = log_str.format(val_acc_full_latest = val_acc_full_latest, 
-        #    val_acc_latest = val_acc_latest, val_auc_latest = val_auc_latest,
-        #                            val_f1_micro_latest = test_f1_micro_latest, val_f1_macro_latest = val_f1_macro_latest,
-        #                            test_acc_full_latest = test_acc_full_latest,
-        #                            test_acc_latest = val_acc, test_f1_micro_latest = test_f1_micro_latest, test_f1_macro_latest = test_f1_macro_latest)
-        #    log_str_full += log_str + '\n'
-        #    print(log_str)
-#
-        #    results[i] = [[val_acc_full, val_acc, val_auc, val_f1_micro, val_f1_macro],
-        #                    [test_acc_full, test_acc, test_auc, test_f1_micro, test_f1_macro],
-        #                    [val_acc_full_latest, val_acc_latest, val_auc_latest, val_f1_micro_latest, val_f1_macro_latest],
-        #                    [test_acc_full_latest, test_acc_latest, test_auc_latest, test_f1_micro_latest, test_f1_macro_latest]]
         
         with open(log_path + '/log'+str(i)+'.csv', 'w') as file:
             file.write(log_str_full)

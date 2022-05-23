@@ -4,14 +4,9 @@ import pickle as pk
 from scipy import sparse
 import torch.optim as optim
 from datetime import datetime
-import os, time, argparse, csv
-from collections import Counter
+import os, time, argparse
 import torch.nn.functional as F
-from torch_sparse import SparseTensor
-from sklearn.model_selection import train_test_split
-from torch.optim.lr_scheduler import CosineAnnealingLR
 from torch_geometric_signed_directed import node_class_split
-from torch_geometric.datasets import WebKB, WikipediaNetwork, WikiCS
 import random
 import networkx as nx
 import pickle as pk
@@ -20,12 +15,11 @@ import pickle as pk
 from utils.Citation import *
 from utils.hermitian import *
 from layer.sparse_magnet import *
-from utils.preprocess import geometric_dataset_sparse, load_syn
 from utils.save_settings import write_log
 from utils.hermitian import hermitian_decomp_sparse
 from torch_geometric_signed_directed.data import load_directed_real_data
-from utils.edge_data import from_scipy_sparse_matrix, in_out_degree
-from utils.preprocess import to_edge_dataset_sparse, load_edge_index, load_syn
+from utils.edge_data import in_out_degree
+from utils.preprocess import load_syn
 
 
 
