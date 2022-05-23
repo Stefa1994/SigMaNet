@@ -16,7 +16,7 @@ import scipy.sparse as sparse
 
 
 # internal files
-from layer.Signum import Signum_link_prediction_one_laplacian
+from layer.Signum import SigMaNet_link_prediction_one_laplacian
 from layer.src2 import laplacian
 from utils.edge_data import link_class_split, link_prediction_evaluation
 from utils.save_settings import write_log
@@ -163,7 +163,7 @@ def main(args):
         ########################################
         edge_index, norm_real, norm_imag = laplacian.process_magnetic_laplacian(edge_index=edge_index, gcn=False, net_flow=args.netflow, x_real=X_real, edge_weight=edge_weight, \
          normalization = 'sym', return_lambda_max = False)
-        model = Signum_link_prediction_one_laplacian(K=args.K, num_features=2, hidden=args.num_filter, label_dim=args.num_class_link,
+        model = SigMaNet_link_prediction_one_laplacian(K=args.K, num_features=2, hidden=args.num_filter, label_dim=args.num_class_link,
                             i_complex = False,  layer=args.layer, follow_math=args.follow_math, gcn =False, net_flow=args.netflow, unwind = True, edge_index=edge_index,\
                             norm_real=norm_real, norm_imag=norm_imag).to(device)
 

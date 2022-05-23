@@ -14,7 +14,7 @@ import pickle as pk
 # internal files
 from utils.Citation import *
 from layer.src2 import laplacian
-from layer.Signum import Signum_node_prediction_one_laplacian
+from layer.Signum import SigMaNet_node_prediction_one_laplacian
 from utils.hermitian import *
 from layer.sparse_magnet import *
 from utils.save_settings import write_log
@@ -133,7 +133,7 @@ def main(args):
     for split in range(splits):
         log_str_full = ''
 
-        model = Signum_node_prediction_one_laplacian(K=args.K, num_features=X_real.size(-1), hidden=args.num_filter, label_dim=cluster_dim,
+        model = SigMaNet_node_prediction_one_laplacian(K=args.K, num_features=X_real.size(-1), hidden=args.num_filter, label_dim=cluster_dim,
                             i_complex = False,  layer=args.layer, follow_math=args.follow_math, gcn =gcn, net_flow=args.netflow, unwind = True, edge_index=edge_index,\
                             norm_real=norm_real, norm_imag=norm_imag).to(device)
 

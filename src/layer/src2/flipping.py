@@ -1,3 +1,9 @@
+'''
+Code for net flow application
+'''
+
+
+
 import networkx as nx
 import numpy as np
 from scipy.sparse import coo_matrix, triu

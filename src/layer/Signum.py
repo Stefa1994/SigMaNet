@@ -1,22 +1,14 @@
 '''
-Signum Code
-'''
 
-from typing import Optional
+SigMaNet architecture
+
+'''
 
 import torch
 from torch.nn import Parameter
 from torch_geometric.nn.inits import zeros, glorot
-from torch_geometric.typing import OptTensor
 from torch_geometric.nn.conv import MessagePassing
-from torch_geometric.utils import remove_self_loops, add_self_loops
-from torch_geometric.utils import (negative_sampling,
-                                   structured_negative_sampling)
 import numpy as np
-
-
-from typing import Optional
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -54,13 +46,13 @@ class complex_relu_layer(nn.Module):
 
 
 
-class SignumConv(MessagePassing):
+class SigMaNetConv(MessagePassing):
     
 
     def __init__(self, in_channels:int, out_channels:int, K:int, i_complex:bool=False, follow_math:bool=True, gcn:bool=False, net_flow:bool=True,
                  normalization:str='sym', bias:bool=True, edge_index=None, norm_real=None, norm_imag=None,**kwargs):
         kwargs.setdefault('aggr', 'add')
-        super(SignumConv, self).__init__(**kwargs)
+        super(SigMaNetConv, self).__init__(**kwargs)
 
         assert K > 0
         assert normalization in [None, 'sym'], 'Invalid normalization'
@@ -120,7 +112,7 @@ class SignumConv(MessagePassing):
         #lambda_max: OptTensor = None,
     ) -> torch.FloatTensor:
         """
-        Making a forward pass of the MagNet Convolution layer.
+        Making a forward pass of the SigMaNet Convolution layer.
         
         Arg types:
             * x_real, x_imag (PyTorch Float Tensor) - Node features.
@@ -158,7 +150,6 @@ class SignumConv(MessagePassing):
            
       
 
-                # Nuovo codice con i cambi opportuni
                 if self.weight.size(0) > 1:
                     Tx_1_real_real = self.propagate(edge_index, x=x_real, norm=norm_real, size=None).to(torch.float) # x_real - norm_real
                     #print("Tx_1_real_real", Tx_1_real_real)
@@ -287,10 +278,8 @@ class SignumConv(MessagePassing):
             self.__class__.__name__, self.in_channels, self.out_channels,
             self.weight.size(0), self.normalization)
 
-class Signum_link_prediction_one_laplacian(nn.Module):
-    r"""The Signum model for link prediction from the
-    s. <https://arxiv.org/pdf/2102.11391.pdf>`_ paper.
-    
+class SigMaNet_link_prediction_one_laplacian(nn.Module):
+    r"""The SigManet model for link prediction from the    
     Args:
         num_features (int): Size of each input sample.
         hidden (int, optional): Number of hidden channels.  Default: 2.
@@ -313,10 +302,10 @@ class Signum_link_prediction_one_laplacian(nn.Module):
         activation:bool=True, layer:int=2, dropout:float=0.5, normalization:str='sym',\
         i_complex:bool=True, follow_math:bool=False,gcn:bool=False, net_flow:bool=True, unwind:bool=False, 
         edge_index=None, norm_real=None, norm_imag=None):
-        super(Signum_link_prediction_one_laplacian, self).__init__()
+        super(SigMaNet_link_prediction_one_laplacian, self).__init__()
 
         chebs = nn.ModuleList()
-        chebs.append(SignumConv(in_channels=num_features, out_channels=hidden, K=K,\
+        chebs.append(SigMaNetConv(in_channels=num_features, out_channels=hidden, K=K,\
                                   i_complex=i_complex, follow_math=follow_math,\
             gcn=gcn, net_flow=net_flow, normalization=normalization, edge_index=edge_index,\
             norm_real=norm_real, norm_imag=norm_imag))
@@ -326,7 +315,7 @@ class Signum_link_prediction_one_laplacian(nn.Module):
             self.complex_relu = complex_relu_layer()
 
         for _ in range(1, layer):
-            chebs.append(SignumConv(in_channels=hidden, out_channels=hidden, K=K, \
+            chebs.append(SigMaNetConv(in_channels=hidden, out_channels=hidden, K=K, \
             i_complex=i_complex, follow_math=follow_math,\
             gcn=gcn, net_flow=net_flow, normalization=normalization, \
             edge_index=edge_index, norm_real=norm_real, norm_imag=norm_imag))
@@ -341,7 +330,7 @@ class Signum_link_prediction_one_laplacian(nn.Module):
         # nel caso di no unwind --> l'ultima operazione deve darmi come output il numero di classi da prevedere
         if not self.unwind:
             print('no unwind!!!')
-            chebs[-1] = SignumConv(in_channels=hidden, out_channels=label_dim, K=K, \
+            chebs[-1] = SigMaNetConv(in_channels=hidden, out_channels=label_dim, K=K, \
             i_complex=i_complex, follow_math=follow_math,\
             gcn=gcn, net_flow=net_flow, normalization=normalization)
             #chebs.append(SignumConv(in_channels=hidden, out_channels=label_dim, K=K, \
@@ -356,8 +345,7 @@ class Signum_link_prediction_one_laplacian(nn.Module):
     def forward(self, real: torch.FloatTensor, imag: torch.FloatTensor, \
         query_edges: torch.LongTensor) -> torch.FloatTensor:
         """
-        Making a forward pass of the MagNet node classification model.
-        
+      
         Arg types:
             * real, imag (PyTorch Float Tensor) - Node features.
             * edge_index (PyTorch Long Tensor) - Edge indices.
@@ -370,17 +358,10 @@ class Signum_link_prediction_one_laplacian(nn.Module):
             real, imag = cheb(real, imag)
             if self.activation:
                 real, imag = self.complex_relu(real, imag)
-        # operazione con i numeri complessi --> operazioni da fare
-        # - Sommo ogni hidden layer parte reale dei due nodi
-        # - Sommo ogni hidden layer parte immaginaria dei due nodi
-        # - Applico la funzione di attivazione che passa dai numeri complessi ai numeri reali
         if not self.unwind:
             real = real[query_edges[:,0]] + real[query_edges[:,1]]
             imag = imag[query_edges[:,0]] + imag[query_edges[:,1]]
             x = real + 1j* imag
-            #if self.dropout > 0:
-            #    x = self.complex_dropout(x)
-            #x = self.complex_softmax(x)
         # Unwind operation
         else:
             x = torch.cat((real[query_edges[:,0]], real[query_edges[:,1]], imag[query_edges[:,0]], imag[query_edges[:,1]]), dim = -1)
@@ -388,14 +369,11 @@ class Signum_link_prediction_one_laplacian(nn.Module):
                 x = F.dropout(x, self.dropout, training=self.training)
             x = self.linear(x)
             x = F.log_softmax(x, dim=1)
-            # x= torch.sigmoid(x)  # nel caso voglio provare altro....
         return x
 
 
-class Signum_node_prediction_one_laplacian(nn.Module):
-    r"""The Signum model for link prediction from the
-    s. <https://arxiv.org/pdf/2102.11391.pdf>`_ paper.
-
+class SigMaNet_node_prediction_one_laplacian(nn.Module):
+    r"""The SigMaNet model for node classification 
     Args:
         num_features (int): Size of each input sample.
         hidden (int, optional): Number of hidden channels.  Default: 2.
@@ -418,10 +396,10 @@ class Signum_node_prediction_one_laplacian(nn.Module):
         activation:bool=True, layer:int=2, dropout:float=0.5, normalization:str='sym',\
         i_complex:bool=True, follow_math:bool=False,gcn:bool=False, net_flow:bool=True, unwind:bool=False,
         edge_index=None, norm_real=None, norm_imag=None):
-        super(Signum_node_prediction_one_laplacian, self).__init__()
+        super(SigMaNet_node_prediction_one_laplacian, self).__init__()
 
         chebs = nn.ModuleList()
-        chebs.append(SignumConv(in_channels=num_features, out_channels=hidden, K=K,\
+        chebs.append(SigMaNetConv(in_channels=num_features, out_channels=hidden, K=K,\
                                   i_complex=i_complex, follow_math=follow_math,\
             gcn=gcn, net_flow=net_flow, normalization=normalization, edge_index=edge_index,\
             norm_real=norm_real, norm_imag=norm_imag))
@@ -431,7 +409,7 @@ class Signum_node_prediction_one_laplacian(nn.Module):
             self.complex_relu = complex_relu_layer()
 
         for _ in range(1, layer):
-            chebs.append(SignumConv(in_channels=hidden, out_channels=hidden, K=K, \
+            chebs.append(SigMaNetConv(in_channels=hidden, out_channels=hidden, K=K, \
             i_complex=i_complex, follow_math=follow_math,\
             gcn=gcn, net_flow=net_flow, normalization=normalization, \
             edge_index=edge_index, norm_real=norm_real, norm_imag=norm_imag))
@@ -440,14 +418,12 @@ class Signum_node_prediction_one_laplacian(nn.Module):
         last_dim = 2
         self.Conv = nn.Conv1d(hidden*last_dim, label_dim, kernel_size=1)
         self.dropout = dropout
-        #self.complex_dropout = drop.Dropout(self.dropout)
-        #self.complex_softmax = act.modLogSoftmax(dim=1)
         self.unwind = unwind
 
         # nel caso di no unwind --> l'ultima operazione deve darmi come output il numero di classi da prevedere
         if not self.unwind:
             print('no unwind!!!')
-            chebs[-1] = SignumConv(in_channels=hidden, out_channels=label_dim, K=K, \
+            chebs[-1] = SigMaNetConv(in_channels=hidden, out_channels=label_dim, K=K, \
             i_complex=i_complex, follow_math=follow_math,\
             gcn=gcn, net_flow=net_flow, normalization=normalization)
             #chebs.append(SignumConv(in_channels=hidden, out_channels=label_dim, K=K, \
@@ -461,8 +437,6 @@ class Signum_node_prediction_one_laplacian(nn.Module):
 
     def forward(self, real: torch.FloatTensor, imag: torch.FloatTensor) -> torch.FloatTensor:
         """
-        Making a forward pass of the MagNet node classification model.
-
         Arg types:
             * real, imag (PyTorch Float Tensor) - Node features.
             * edge_index (PyTorch Long Tensor) - Edge indices.
@@ -475,13 +449,7 @@ class Signum_node_prediction_one_laplacian(nn.Module):
             real, imag = cheb(real, imag)
             if self.activation:
                 real, imag = self.complex_relu(real, imag)
-        # operazione con i numeri complessi --> operazioni da fare
-        # - Sommo ogni hidden layer parte reale dei due nodi
-        # - Sommo ogni hidden layer parte immaginaria dei due nodi
-        # - Applico la funzione di attivazione che passa dai numeri complessi ai numeri reali
         if not self.unwind:
-            real = real[query_edges[:,0]] + real[query_edges[:,1]]
-            imag = imag[query_edges[:,0]] + imag[query_edges[:,1]]
             x = real + 1j* imag
             #if self.dropout > 0:
             #    x = self.complex_dropout(x)

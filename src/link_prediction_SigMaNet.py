@@ -11,7 +11,7 @@ for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
             for lr in [1e-3]:
                 log_path = 'Edge'+data+'_SigMaNet'
                 for num_filter in [ 16, 32,  64]:
-                        command = ('python3 Edge_SigNum.py ' 
+                        command = ('python3 Edge_SigMaNet.py ' 
                                     +' --dataset='+data
                                     +' --num_filter='+str(num_filter)
                                     +' --K=1'
@@ -24,22 +24,6 @@ for data in ['bitcoin_otc', 'bitcoin_alpha', 'telegram' ]:
                                     +' --task='+ task
                                     +' -N'
                                     +' -F'
-                                    +' --noisy')
-                        print(command)
-                        os.system(command)
-                        command = ('python3 Edge_SigNum.py ' 
-                                    +' --dataset='+data
-                                    +' --num_filter='+str(num_filter)
-                                    +' --K=1'
-                                    #+' -D'
-                                    +' --num_class_link='+str(num_class_link)
-                                    +' --log_path='+str(log_path)
-                                    +' --layer='+str(layer)
-                                    +' --epochs='+epochs
-                                    +' --lr='+str(lr)
-                                    +' --task='+ task
-                                    +' -F'
-                                    #+' -N'
                                     +' --noisy')
                         print(command)
                         os.system(command)
