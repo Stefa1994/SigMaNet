@@ -30,8 +30,6 @@ python3 Edge_SigMaNet.py --dataset dataset_nodes500_alpha0.05_beta0.2 --task dir
 ```
 
 
-
-
 ## License
 
 SigMaNet is released under the [MIT License](https://choosealicense.com/licenses/mit/)
