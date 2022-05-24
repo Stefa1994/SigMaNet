@@ -16,7 +16,6 @@ from utils.edge_data import link_class_split, in_out_degree, load_signed_real_da
 from utils.preprocess import F_in_out
 from utils.save_settings import write_log
 # select cuda device if available
-from utils.Citation import load_citation_link
 
 cuda_device = 0
 device = torch.device("cuda:%d" % cuda_device if torch.cuda.is_available() else "cpu")
