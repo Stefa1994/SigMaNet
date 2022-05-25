@@ -16,8 +16,7 @@ Other library are listed below
 
 ## Repository structure
 
-The repository contains 8 different files that are used to launch experiments by invoking the different models used for comparisons for divided in the different task. 
-Furthermore, the repository contains two folders:
+The repository contains two folders:
 - **data** contains the syntactic graphs in *synthetic* and the WikiRfa dataset in *wikirfa*.
 - **src** contains all the model implementations used for running the experiments. Futhermore, it stores two other foldes **utils** and **layer**.
 
