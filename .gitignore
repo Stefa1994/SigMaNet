@@ -1,9 +1,9 @@
 src/node_classification_magnet.py
 src/sparse_Magnet_modificato.py
-.link_prediction_SigMaNet.py
-.link_prediction_synthetic_data_SigMaNet.py
-.link_prediction_synthetic_data.py
-.link_prediction.py
-.link_sign_prediction.py
-.node_classification.py
-.node_classification_SigMaNet.py
+src/link_prediction_SigMaNet.py
+src/link_prediction_synthetic_data_SigMaNet.py
+src/link_prediction_synthetic_data.py
+src/link_prediction.py
+src/link_sign_prediction.py
+src/node_classification.py
+src/node_classification_SigMaNet.py
