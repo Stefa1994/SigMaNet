@@ -121,6 +121,7 @@ def main(args):
     #else:
     #    results = np.zeros((10, 4, 5))
     for i in range(10):
+        log_str_full = ''
         ########################################
         # get hermitian laplacian
         ########################################
@@ -175,7 +176,6 @@ def main(args):
         #################################
         best_test_err = 1000000.0
         early_stopping = 0
-        log_str_full = ''
         for epoch in range(args.epochs):
             #print('epoca', epoch)
             start_time = time.time()
