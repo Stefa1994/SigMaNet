@@ -7,3 +7,4 @@ src/link_prediction.py
 src/link_sign_prediction.py
 src/node_classification.py
 src/node_classification_SigMaNet.py
+src/sparse_Magnet_modificato.py
