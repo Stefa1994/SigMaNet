@@ -282,19 +282,17 @@ class SigMaNet_link_prediction_one_laplacian(nn.Module):
         num_features (int): Size of each input sample.
         hidden (int, optional): Number of hidden channels.  Default: 2.
         K (int, optional): Order of the Chebyshev polynomial.  Default: 2.
-        q (float, optional): Initial value of the phase parameter, 0 <= q <= 0.25. Default: 0.25.
         label_dim (int, optional): Number of output classes.  Default: 2.
         activation (bool, optional): whether to use activation function or not. (default: :obj:`True`)
-        trainable_q (bool, optional): whether to set q to be trainable or not. (default: :obj:`False`)
-        layer (int, optional): Number of MagNetConv layers. Deafult: 2.
+        layer (int, optional): Number of SigMagNetConv layers. Deafult: 2.
         dropout (float, optional): Dropout value. (default: :obj:`0.5`)
         normalization (str, optional): The normalization scheme for the magnetic
             Laplacian (default: :obj:`sym`):
             1. :obj:`None`: No normalization
-            :math:`\mathbf{L} = \mathbf{D} - \mathbf{A} Hadamard \exp(i \Theta^{(q)})`
+            :math:`\mathbf{L} = \mathbf{D} - \mathbf{H}^{\sigma}
             2. :obj:`"sym"`: Symmetric normalization
-            :math:`\mathbf{L} = \mathbf{I} - \mathbf{D}^{-1/2} \mathbf{A}
-            \mathbf{D}^{-1/2} Hadamard \exp(i \Theta^{(q)})`
+            :math:`\mathbf{L} = \mathbf{I} - \mathbf{D}^{-1/2} \mathbf{H}^{\sigma}
+            \mathbf{D}^{-1/2}`
     """
     def __init__(self, num_features:int, hidden:int=2, K:int=2, label_dim:int=2, \
         activation:bool=True, layer:int=2, dropout:float=0.5, normalization:str='sym',\
@@ -376,19 +374,17 @@ class SigMaNet_node_prediction_one_laplacian(nn.Module):
         num_features (int): Size of each input sample.
         hidden (int, optional): Number of hidden channels.  Default: 2.
         K (int, optional): Order of the Chebyshev polynomial.  Default: 2.
-        q (float, optional): Initial value of the phase parameter, 0 <= q <= 0.25. Default: 0.25.
         label_dim (int, optional): Number of output classes.  Default: 2.
         activation (bool, optional): whether to use activation function or not. (default: :obj:`True`)
-        trainable_q (bool, optional): whether to set q to be trainable or not. (default: :obj:`False`)
-        layer (int, optional): Number of MagNetConv layers. Deafult: 2.
+        layer (int, optional): Number of SigMagNetConv layers. Deafult: 2.
         dropout (float, optional): Dropout value. (default: :obj:`0.5`)
         normalization (str, optional): The normalization scheme for the magnetic
             Laplacian (default: :obj:`sym`):
             1. :obj:`None`: No normalization
-            :math:`\mathbf{L} = \mathbf{D} - \mathbf{A} Hadamard \exp(i \Theta^{(q)})`
+            :math:`\mathbf{L} = \mathbf{D} - \mathbf{H}^{\sigma}
             2. :obj:`"sym"`: Symmetric normalization
-            :math:`\mathbf{L} = \mathbf{I} - \mathbf{D}^{-1/2} \mathbf{A}
-            \mathbf{D}^{-1/2} Hadamard \exp(i \Theta^{(q)})`
+            :math:`\mathbf{L} = \mathbf{I} - \mathbf{D}^{-1/2} \mathbf{H}^{\sigma}
+            \mathbf{D}^{-1/2}`
     """
     def __init__(self, num_features:int, hidden:int=2, K:int=1, label_dim:int=2, \
         activation:bool=True, layer:int=2, dropout:float=0.5, normalization:str='sym',\
