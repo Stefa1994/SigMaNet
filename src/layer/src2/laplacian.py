@@ -35,10 +35,10 @@ def get_Sign_Magnetic_Laplacian(edge_index: torch.LongTensor, gcn: bool, net_flo
         * **edge_index** (PyTorch LongTensor) - The edge indices.
         * **edge_weight** (PyTorch Tensor, optional) - One-dimensional edge weights. (default: :obj:`None`)
         * **normalization** (str, optional) - The normalization scheme for the magnetic Laplacian (default: :obj:`sym`) -
-            1. :obj:`None`: No normalization :math:`\mathbf{L} = \mathbf{D} - \mathbf{A} Hadamard \exp(i \Theta^{(q)})`
+            1. :obj:`None`: No normalization :math:`\mathbf{L} = \mathbf{D} - \mathbf{H}^{\sigma}`
             
-            2. :obj:`"sym"`: Symmetric normalization :math:`\mathbf{L} = \mathbf{I} - \mathbf{D}^{-1/2} \mathbf{A}
-            \mathbf{D}^{-1/2} Hadamard \exp(i \Theta^{(q)})`
+            2. :obj:`"sym"`: Symmetric normalization :math:`\mathbf{L} = \mathbf{I} - \mathbf{D}^{-1/2} \mathbf{H}^{\sigma}`
+            \mathbf{D}^{-1/2}`
         
         * **dtype** (torch.dtype, optional) - The desired data type of returned tensor in case :obj:`edge_weight=None`. (default: :obj:`None`)
         * **num_nodes** (int, optional) - The number of nodes, *i.e.* :obj:`max_val + 1` of :attr:`edge_index`. (default: :obj:`None`)
