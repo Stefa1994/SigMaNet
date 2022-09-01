@@ -75,7 +75,7 @@ def main(args):
     random.seed(args.randomseed)
     torch.manual_seed(args.randomseed)
     np.random.seed(args.randomseed)
-    gcn = False
+    gcn = True
 
     date_time = datetime.now().strftime('%m-%d-%H:%M:%S')
     log_path = os.path.join(args.log_root, args.log_path, args.save_name, date_time)
