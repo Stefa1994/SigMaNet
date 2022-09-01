@@ -35,8 +35,8 @@ def parse_args():
 
     parser.add_argument('--K', type=int, default=1, help='K for cheb series')
     parser.add_argument('--layer', type=int, default=2, help='how many layers of gcn in the model, only 1 or 2 layers.')
-    parser.add_argument('--netflow', '-N', action='store_true', help='if use net flow')
-    parser.add_argument('--follow_math', '-F', action='store_true', help='if follow math')
+    parser.add_argument('--netflow', '-N', action='store_false', help='if use net flow')
+    parser.add_argument('--follow_math', '-F', action='store_false', help='if follow math')
     parser.add_argument('--dropout', type=float, default=0.5, help='dropout prob')
     parser.add_argument('--debug', '-D', action='store_true', help='debug mode')
     parser.add_argument('--num_class_link', type=int, default=2,
