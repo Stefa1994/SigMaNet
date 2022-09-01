@@ -74,7 +74,7 @@ def main(args):
     np.random.seed(args.randomseed)
 
     #follow_math = False
-    gcn = False
+    gcn = True
     #net_flow = True
 
     date_time = datetime.now().strftime('%m-%d-%H:%M:%S')
