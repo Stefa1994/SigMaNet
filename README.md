@@ -25,7 +25,7 @@ The repository contains two folders:
 ```
 cd src
 python3 node_SigMaNet.py --dataset dataset_nodes500_alpha0.05_beta0.2
-python3 Edge_SigMaNet.py --dataset dataset_nodes500_alpha0.05_beta0.2 --task direction --noisy -N
+python3 Edge_SigMaNet.py --dataset dataset_nodes500_alpha0.05_beta0.2 --task direction --noisy
 ```
 
 
