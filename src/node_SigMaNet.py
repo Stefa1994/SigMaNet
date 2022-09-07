@@ -51,7 +51,7 @@ def parse_args():
     parser.add_argument('--lr', type=float, default=5e-3, help='learning rate')
     parser.add_argument('--l2', type=float, default=5e-4, help='l2 regularizer')
 
-    parser.add_argument('--num_filter', type=int, default=1, help='num of filters')
+    parser.add_argument('--num_filter', type=int, default=64, help='num of filters')
     parser.add_argument('--randomseed', type=int, default=0, help='if set random seed in training')
     return parser.parse_args()
 
