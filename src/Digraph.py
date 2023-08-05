@@ -67,16 +67,27 @@ def main(args):
 
     dataset_name = args.dataset.split('/')
     if dataset_name[0] != 'telegram':
+<<<<<<< HEAD
         try:
             data = pk.load(open(f'./data/fake/{args.dataset}.pk','rb'))
         except:
             data = pk.load(open(f'./data/fake_for_quaternion_new/{args.dataset}.pk','rb'))
+=======
+        data = pk.load(open(f'../data/fake/{args.dataset}.pk','rb'))
+>>>>>>> da0026d665c714ecd47a413ab639fd7aaab4fabe
         data = node_class_split(data, train_size_per_class=0.6, val_size_per_class=0.2)
     else:
         data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[0])#.to(device)
         subset = args.dataset
      #save_name = args.method_name + '_' + 'Layer' + str(args.layer) + '_' + 'lr' + str(args.lr) + 'num_filters' + str(int(args.num_filter))+ '_' + 'task' + str((args.task))
+<<<<<<< HEAD
         #data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[1])#.to(device)
+=======
+        if len(dataset_name) == 1:
+            data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[0])
+        else:
+            data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[1])
+>>>>>>> da0026d665c714ecd47a413ab639fd7aaab4fabe
 
     if not data.__contains__('edge_weight'):
         data.edge_weight = None

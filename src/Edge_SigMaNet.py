@@ -32,7 +32,7 @@ def parse_args():
     parser.add_argument('--task', type=str, default='direction', help='Task')
     
     parser.add_argument('--epochs', type=int, default=1500, help='training epochs')
-    parser.add_argument('--num_filter', type=int, default=4, help='num of filters')
+    parser.add_argument('--num_filter', type=int, default=64, help='num of filters')
     parser.add_argument('--method_name', type=str, default='SigNum', help='method name')
 
     parser.add_argument('--K', type=int, default=1, help='K for cheb series')
@@ -85,6 +85,7 @@ def main(args):
     
     if os.path.isdir(log_path) == False:
         os.makedirs(log_path)
+    
     
     
     dataset_name = args.dataset.split('/')

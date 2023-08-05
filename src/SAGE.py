@@ -64,16 +64,24 @@ def main(args):
     log_path = os.path.join(args.log_root, args.log_path, args.save_name, date_time)
 
     dataset_name = args.dataset.split('/')
+<<<<<<< HEAD
     if len(dataset_name) == 1:
         try:
             data = pk.load(open(f'./data/fake/{args.dataset}.pk','rb'))
         except:
             data = pk.load(open(f'./data/fake_for_quaternion_new/{args.dataset}.pk','rb'))
+=======
+    if dataset_name[0] != 'telegram':
+        data = pk.load(open(f'../data/fake/{args.dataset}.pk','rb'))
+>>>>>>> da0026d665c714ecd47a413ab639fd7aaab4fabe
         data = node_class_split(data, train_size_per_class=0.6, val_size_per_class=0.2)
     else:
         load_func, subset = args.dataset.split('/')[0], args.dataset.split('/')[1]
      #save_name = args.method_name + '_' + 'Layer' + str(args.layer) + '_' + 'lr' + str(args.lr) + 'num_filters' + str(int(args.num_filter))+ '_' + 'task' + str((args.task))
-        data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[1])#.to(device)
+        if len(dataset_name) == 1:
+            data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[0])
+        else:
+            data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[1])
 
 
     if os.path.isdir(log_path) == False:

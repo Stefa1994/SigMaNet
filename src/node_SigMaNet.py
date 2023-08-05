@@ -51,7 +51,7 @@ def parse_args():
     parser.add_argument('--lr', type=float, default=5e-3, help='learning rate')
     parser.add_argument('--l2', type=float, default=5e-4, help='l2 regularizer')
 
-    parser.add_argument('--num_filter', type=int, default=1, help='num of filters')
+    parser.add_argument('--num_filter', type=int, default=64, help='num of filters')
     parser.add_argument('--randomseed', type=int, default=0, help='if set random seed in training')
     return parser.parse_args()
 
@@ -83,16 +83,25 @@ def main(args):
         os.makedirs(log_path)
 
     dataset_name = args.dataset.split('/')
+<<<<<<< HEAD
     if len(dataset_name) == 1:
         try:
             data = pk.load(open(f'./data/fake/{args.dataset}.pk','rb'))
         except:
             data = pk.load(open(f'./data/fake_for_quaternion_new/{args.dataset}.pk','rb'))
+=======
+    if dataset_name[0] != 'telegram':
+        data = pk.load(open(f'../data/fake/{args.dataset}.pk','rb'))
+>>>>>>> da0026d665c714ecd47a413ab639fd7aaab4fabe
         data = node_class_split(data, train_size_per_class=0.6, val_size_per_class=0.2)
         subset = args.dataset
     else:
         load_func, subset = args.dataset.split('/')[0], args.dataset.split('/')[1]
-        data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[1])#.to(device)
+     #save_name = args.method_name + '_' + 'Layer' + str(args.layer) + '_' + 'lr' + str(args.lr) + 'num_filters' + str(int(args.num_filter))+ '_' + 'task' + str((args.task))
+        if len(dataset_name) == 1:
+            data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[0])
+        else:
+            data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[1])
     dataset = data
 
     if not data.__contains__('edge_weight'):

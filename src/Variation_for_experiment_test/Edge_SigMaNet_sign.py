@@ -40,18 +40,18 @@ def parse_args():
     parser.add_argument('--task', type=str, default='direction', help='Task')
     
     parser.add_argument('--epochs', type=int, default=1500, help='training epochs')
-    parser.add_argument('--num_filter', type=int, default=4, help='num of filters')
+    parser.add_argument('--num_filter', type=int, default=64, help='num of filters')
     parser.add_argument('--method_name', type=str, default='SigNum', help='method name')
 
     parser.add_argument('--K', type=int, default=1, help='K for cheb series')
     parser.add_argument('--layer', type=int, default=2, help='how many layers of gcn in the model, only 1 or 2 layers.')
     parser.add_argument('--netflow', '-N', action='store_true', help='if use net flow')
-    parser.add_argument('--follow_math', '-F', action='store_true', help='if follow math')
+    parser.add_argument('--follow_math', '-F', action='store_false', help='if follow math')
     parser.add_argument('--dropout', type=float, default=0.3, help='dropout prob')
     parser.add_argument('--debug', '-D', action='store_true', help='debug mode')
     parser.add_argument('--num_class_link', type=int, default=2,
                         help='number of classes for link direction prediction(2 or 3).')
-
+    
     parser.add_argument('--lr', type=float, default=5e-3, help='learning rate')
     parser.add_argument('--l2', type=float, default=5e-4, help='l2 regularizer')
     parser.add_argument('--noisy',  action='store_true')
@@ -167,7 +167,7 @@ def main(args):
         edge_index, norm_real, norm_imag = laplacian.process_magnetic_laplacian(edge_index=edge_index, gcn=False, net_flow=args.netflow, x_real=X_real, edge_weight=edge_weight, \
          normalization = 'sym', return_lambda_max = False)
         model = SigMaNet_link_prediction_one_laplacian(K=args.K, num_features=2, hidden=args.num_filter, label_dim=args.num_class_link,
-                            i_complex = False,  layer=args.layer, follow_math=args.follow_math, gcn =False, net_flow=args.netflow, unwind = True, edge_index=edge_index,\
+                            i_complex = False,  layer=args.layer, follow_math=args.follow_math, gcn =True, net_flow=args.netflow, unwind = True, edge_index=edge_index,\
                             norm_real=norm_real, norm_imag=norm_imag).to(device)
 
         #model = nn.DataParallel(model)  

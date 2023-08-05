@@ -16,9 +16,12 @@ from utils.edge_data import link_class_split, in_out_degree, load_signed_real_da
 from utils.preprocess import F_in_out
 from utils.save_settings import write_log
 # select cuda device if available
+<<<<<<< HEAD
 from utils.Citation import load_citation_link
 from utils.edge_data_new import link_class_split_new
 
+=======
+>>>>>>> da0026d665c714ecd47a413ab639fd7aaab4fabe
 
 cuda_device = 0
 device = torch.device("cuda:%d" % cuda_device if torch.cuda.is_available() else "cpu")
@@ -66,21 +69,30 @@ def main(args):
     date_time = datetime.now().strftime('%m-%d-%H:%M:%S')
     log_path = os.path.join(args.log_root, args.log_path, args.save_name, date_time)
 
+    
     dataset_name = args.dataset.split('/')
-    if len(dataset_name) == 1:
+    if args.dataset in ['telegram']:
+        data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[0]).to(device)
+        data = data.to(device)
+        subset = args.dataset
+    else:
+        #data = load_signed_real_data_no_negative(dataset=args.dataset).to(device)
+        #data, edge_neg, weight_neg = load_signed_real_data_also_negative(dataset=args.dataset)
         if args.dataset in ['bitcoin_alpha', 'bitcoin_otc']:
             data = load_signed_real_data_no_negative(dataset=args.dataset).to(device)
         else:
+<<<<<<< HEAD
             try:
                 data = pk.load(open(f'./data/fake/{args.dataset}.pk','rb'))
             except:
                 data = pk.load(open(f'./data/fake_for_quaternion_new/{args.dataset}.pk','rb'))
             data = data.to(device)
+=======
+            data = pk.load(open(f'../data/fake/{args.dataset}.pk','rb'))
+        #subset = args.dataset        
+        data = data.to(device)
+>>>>>>> da0026d665c714ecd47a413ab639fd7aaab4fabe
         subset = args.dataset
-    else:
-        load_func, subset = args.dataset.split('/')[0], args.dataset.split('/')[1]
-     #save_name = args.method_name + '_' + 'Layer' + str(args.layer) + '_' + 'lr' + str(args.lr) + 'num_filters' + str(int(args.num_filter))+ '_' + 'task' + str((args.task))
-        data = load_directed_real_data(dataset=dataset_name[0], name=dataset_name[1]).to(device)
     edge_index = data.edge_index
     if os.path.isdir(log_path) == False:
         os.makedirs(log_path)

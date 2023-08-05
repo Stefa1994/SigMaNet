@@ -1,5 +1,6 @@
 src/node_classification_magnet.py
 src/sparse_Magnet_modificato.py
+<<<<<<< HEAD
 processed/
 raw/
 variant_for_test/
@@ -20,3 +21,14 @@ tmp_data/
 
 *.pyc
 *.pk
+=======
+src/link_prediction_SigMaNet.py
+src/link_prediction_synthetic_data_SigMaNet.py
+src/link_prediction_synthetic_data.py
+src/link_prediction.py
+src/link_sign_prediction.py
+src/node_classification.py
+src/node_classification_SigMaNet.py
+src/sparse_Magnet_modificato.py
+src/node_classification_magnet.py
+>>>>>>> da0026d665c714ecd47a413ab639fd7aaab4fabe
